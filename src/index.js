@@ -43,6 +43,21 @@ app.post('/system/date', (req, res) => {
   });
 });
 
+app.get('/system/date', (req, res) => {
+  exec('date "+%Y-%m-%d %H:%M:%S"', (error, stdout, stderr) => {
+    if (error) {
+      return res.status(500).json({
+        error: 'failed to retrieve system date',
+        details: stderr.trim() || error.message,
+      });
+    }
+
+    return res.status(200).json({
+      currentDate: stdout.trim(),
+    });
+  });
+});
+
 app.listen(PORT, () => {
   console.log(`Server running on http://localhost:${PORT}`);
 });
